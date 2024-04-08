@@ -1,0 +1,23 @@
+version: '3.4'
+services:
+  yugabytedb:
+    image: yugabytedb/yugabyte:2.21.0.0-b545
+    container_name: yugabyte
+    command:
+      - bin/yugabyted
+      - start
+      - --daemon=false
+      - --initial_scripts_dir=/
+    ports:
+      - "7000:7000"
+      - "9000:9000"
+      - "15433:15433" 
+      - "5433:5433"
+      - "9042:9042"
+
+    environment:
+      YSQL_USER: "yugabytedb"
+      YSQL_PASSWORD: "yugabytedb"
+      YSQL_DB: "yugabytedb"
+    volumes:
+      - /yb_data:/home/yugabyte/yb_data
