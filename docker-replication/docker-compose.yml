@@ -1,0 +1,76 @@
+services:
+  yugabytedb1:
+    image: yugabytedb/yugabyte:latest
+    container_name: yugabytedb1
+    ports:
+      - "7000:7000"  # UI
+      - "7100:7100"  # Master Admin
+      - "9100:9100"  # TServer Admin
+      - "5433:5433"  # YSQL API
+      - "9042:9042"  # YCQL API
+      - "6379:6379"  # YEDIS
+    command: ["/bin/bash", "-c", "bin/yugabyted start --daemon=false"]
+    healthcheck:
+      test: "exit 0"
+
+  yugabytedb2:
+    image: yugabytedb/yugabyte:latest
+    container_name: yugabytedb2
+    ports:
+      - "7101:7100"  # Master Admin
+      - "9101:9100"  # TServer Admin
+      - "5434:5433"  # YSQL API
+      - "9043:9042"  # YCQL API
+      - "6380:6379"  # YEDIS
+
+    command: ["/bin/bash", "-c", "bin/yugabyted start --daemon=false --join yugabytedb1"]
+    depends_on:
+      yugabytedb1:
+        condition: service_healthy
+    restart: unless-stopped
+
+  yugabytedb3:
+    image: yugabytedb/yugabyte:latest
+    container_name: yugabytedb3
+    ports:
+      - "7102:7100"  # Master Admin
+      - "9102:9100"  # TServer Admin
+      - "5435:5433"  # YSQL API
+      - "9044:9042"  # YCQL API
+      - "6381:6379"  # YEDIS
+    command: ["/bin/bash", "-c", "bin/yugabyted start --daemon=false --join yugabytedb1"]
+    depends_on:
+      yugabytedb1:
+        condition: service_healthy
+    restart: unless-stopped
+
+
+  yugabytedb4:
+    image: yugabytedb/yugabyte:latest
+    container_name: yugabytedb4
+    ports:
+      - "7103:7100"  # Master Admin
+      - "9103:9100"  # TServer Admin
+      - "5436:5433"  # YSQL API
+      - "9045:9042"  # YCQL API
+      - "6382:6379"  # YEDIS
+    command: ["/bin/bash", "-c", "bin/yugabyted start --daemon=false --join yugabytedb1"]
+    depends_on:
+      yugabytedb1:
+        condition: service_healthy
+    restart: unless-stopped
+
+  yugabytedb5:
+    image: yugabytedb/yugabyte:latest
+    container_name: yugabytedb5
+    ports:
+      - "7104:7100"  # Master Admin
+      - "9104:9100"  # TServer Admin
+      - "5437:5433"  # YSQL API
+      - "9046:9042"  # YCQL API
+      - "6383:6379"  # YEDIS
+    command: ["/bin/bash", "-c", "bin/yugabyted start --daemon=false --join yugabytedb1"]
+    depends_on:
+      yugabytedb1:
+        condition: service_healthy
+    restart: unless-stopped
